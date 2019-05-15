@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MaterialTSCore", "MaterialTSCore\MaterialTSCore.csproj", "{408C47AA-0C11-42CD-8E12-2DD64C5036CA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{408C47AA-0C11-42CD-8E12-2DD64C5036CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{408C47AA-0C11-42CD-8E12-2DD64C5036CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{408C47AA-0C11-42CD-8E12-2DD64C5036CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{408C47AA-0C11-42CD-8E12-2DD64C5036CA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {285ABA89-4EE6-44F5-A39E-80C7E8BBAAEC}
+	EndGlobalSection
+EndGlobal
