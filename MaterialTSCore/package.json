@@ -30,7 +30,7 @@
 		"html-webpack-plugin": "^3.2.0"
 	},
 	"-vs-binding": {
-		"ProjectLoaded": [
+		"ProjectOpened": [
 			"watch"
 		]
 	}
