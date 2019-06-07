@@ -7,28 +7,7 @@ import InboxIcon from '@material-ui/icons/Inbox';
 import MailIcon from '@material-ui/icons/Mail';
 import Breadcrumbs from '@material-ui/lab/Breadcrumbs';
 import classNames from 'classnames';
-import { Record } from 'immutable';
 import TopBar from './TopBar';
-
-type ProductParams = {
-	name: string;
-	address: string;
-	telephone: string;
-	website: string;
-};
-
-var defaultProduct = { 
-	name: '',
-	address: '', 
-	telephone: '', 
-	website: '' 
-};
-
-export class ProductRecord extends Record<ProductParams>(defaultProduct) {
-	with<TKey extends keyof ProductParams>(key: TKey, value: ProductParams[TKey]) {
-		return this.set(key, value);
-	}
-}
 
 const drawerWidth = 240;
 
@@ -97,12 +76,12 @@ const styles = (theme: Theme) => createStyles({
 });
 
 export interface BootstrapPageProps extends WithStyles<typeof styles> {
-	sidebarOpen?: boolean;
+	sidebarOpen?: Readonly<boolean>;
 }
 
 export interface BootstrapPageState {
-	sidebarOpen: boolean;
-	product: ProductRecord;
+	sidebarOpen: Readonly<boolean>;
+	product: Readonly<ProductDetails>;
 }
 
 class BootstrapPage extends React.Component<BootstrapPageProps, BootstrapPageState> {
@@ -110,7 +89,12 @@ class BootstrapPage extends React.Component<BootstrapPageProps, BootstrapPageSta
 		super(props);
 		this.state = {
 			sidebarOpen: props.sidebarOpen || false, 
-			product: new ProductRecord()
+			product: {
+				name: '',
+				address: '', 
+				telephone: '',
+				website: ''
+			}
 		};
 	}
 
@@ -121,10 +105,12 @@ class BootstrapPage extends React.Component<BootstrapPageProps, BootstrapPageSta
 	}
 	onSidebarOpen = () => this.updateState('sidebarOpen', true);
 	onSidebarClose = () => this.updateState('sidebarOpen', false);
-	onProductChange = (name: keyof ProductParams) => 
+	onProductChange = (fieldName: keyof ProductDetails) => 
 		(ev: React.ChangeEvent<HTMLInputElement>) => {
+			const update = { ...this.state.product };
+			update[fieldName] = ev.currentTarget.value;
 			this.setState({
-				product: this.state.product.set(name, ev.currentTarget.value)
+				product: update
 			} as Pick<BootstrapPageState, keyof BootstrapPageState>);
 		};
 
@@ -198,88 +184,32 @@ class BootstrapPage extends React.Component<BootstrapPageProps, BootstrapPageSta
 							<Grid item xs={5}>
 								<Paper className={classes.paper}>
 									<Grid item xs>
-										<TextField
-											label="Name"
-											value={this.state.product.name}
-											onChange={this.onProductChange('name')}
-											margin="normal"
-											variant="outlined"
-											className={classes.textField}
-										/>
+										{this.renderField('Name', this.state.product.name, 'name', classes.textField)}
 									</Grid>
 									<Grid item xs>
-										<TextField
-											label="Address"
-											value={this.state.product.address}
-											onChange={this.onProductChange('address')}
-											margin="normal"
-											variant="outlined"
-											className={classes.textField}
-										/>
+										{this.renderField('Address', this.state.product.address, 'address', classes.textField)}
 									</Grid>
 									<Grid item xs>
-										<TextField
-											label="Telephone"
-											value={this.state.product.telephone}
-											onChange={this.onProductChange('telephone')}
-											margin="normal"
-											variant="outlined"
-											className={classes.textField}
-										/>
+										{this.renderField('Telephone', this.state.product.telephone, 'telephone', classes.textField)}
 									</Grid>
 									<Grid item xs>
-										<TextField
-											label="Website"
-											value={this.state.product.website}
-											onChange={this.onProductChange('website')}
-											margin="normal"
-											variant="outlined" 
-											className={classes.textField}
-										/>
+										{this.renderField('Website', this.state.product.website, 'website', classes.textField)}
 									</Grid>
 								</Paper>
 							</Grid>
 							<Grid item xs={5}>
 								<Paper className={classes.paper}>
 									<Grid item xs>
-										<TextField
-											label="Name"
-											value={this.state.product.name}
-											onChange={this.onProductChange('name')}
-											margin="normal"
-											variant="outlined"
-											className={classes.textField}
-										/>
+										{this.renderField('Name', this.state.product.name, 'name', classes.textField)}
 									</Grid>
 									<Grid item xs>
-										<TextField
-											label="Address"
-											value={this.state.product.address}
-											onChange={this.onProductChange('address')}
-											margin="normal"
-											variant="outlined"
-											className={classes.textField}
-										/>
+										{this.renderField('Address', this.state.product.address, 'address', classes.textField)}
 									</Grid>
 									<Grid item xs>
-										<TextField
-											label="Telephone"
-											value={this.state.product.telephone}
-											onChange={this.onProductChange('telephone')}
-											margin="normal"
-											variant="outlined"
-											className={classes.textField}
-										/>
+										{this.renderField('Telephone', this.state.product.telephone, 'telephone', classes.textField)}
 									</Grid>
 									<Grid item xs>
-										<TextField
-											label="Website"
-											value={this.state.product.website}
-											onChange={this.onProductChange('website')}
-											margin="normal"
-											variant="outlined" 
-											className={classes.textField}
-										/>
+										{this.renderField('Website', this.state.product.website, 'website', classes.textField)}
 									</Grid>
 								</Paper>
 							</Grid>
@@ -289,11 +219,11 @@ class BootstrapPage extends React.Component<BootstrapPageProps, BootstrapPageSta
 						})}>
 							<Toolbar className={classes.toolbar}>
 								<Button variant="contained" className={classes.barButton}>
-									<SaveIcon />
+									<SaveIcon />&nbsp;
 									Save
 								</Button>
 								<Button variant="contained" color="default" className={classes.barButton}>
-									Close
+									Close&nbsp;
 									<CloseIcon />
 								</Button>
 							</Toolbar>
@@ -301,6 +231,19 @@ class BootstrapPage extends React.Component<BootstrapPageProps, BootstrapPageSta
 					</Grid>
 				</main>
 			</div>
+		);
+	}
+
+	renderField(label: string, value: string, fieldName: keyof ProductDetails, cssClassName: string): JSX.Element {
+		return (
+			<TextField
+				label={label}
+				value={value}
+				onChange={this.onProductChange(fieldName)}
+				margin="normal"
+				variant="outlined"
+				className={cssClassName}
+			/>
 		);
 	}
 }
